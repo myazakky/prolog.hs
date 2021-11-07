@@ -1,11 +1,12 @@
-module Src.Interpreter where
+module Interpreter where
 
 import Data.List (intersectBy)
+import DataType
 import Text.Show (Show)
 
-data Term = Variable String | Atom String deriving (Show)
-
 type Assigment = (Term, Term)
+
+type Condition = (Bool, [Assigment])
 
 canTakeTerm :: [Assigment] -> Term -> Bool
 canTakeTerm as t = any (\a -> fst a === t) as
@@ -17,18 +18,10 @@ isVariable :: Term -> Bool
 isVariable (Variable _) = True
 isVariable _ = False
 
-type Condition = (Bool, [Assigment])
-
 areConflict :: Condition -> Condition -> Bool
 areConflict (_, a1) (_, a2) = any (\a -> canTakeTerm a2 (fst a) && takeTerm a2 (fst a) /= snd a) a1
 
 arentConflict c1 c2 = not (areConflict c1 c2)
-
-data Literal = Literal
-  { literalName :: String,
-    literalArgs :: [Term]
-  }
-  deriving (Show)
 
 substitute :: Literal -> [Assigment] -> Literal
 substitute l as = Literal (literalName l) (map (\t -> if canTakeTerm as t then takeTerm as t else t) (literalArgs l))
@@ -45,10 +38,6 @@ instance Eq Term where
 (==^) l1 l2 =
   literalName l1 == literalName l2
     && literalArgs l1 == literalArgs l2
-
-data Clause = CLiteral Literal | And Literal Clause deriving (Show)
-
-data Sentence = SLiteral Literal | Sentence Literal Clause deriving (Show)
 
 goal :: Sentence -> Literal
 goal (SLiteral l) = l

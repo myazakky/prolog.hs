@@ -1,6 +1,7 @@
 module TestInterpreter where
 
-import Src.Interpreter
+import DataType
+import Interpreter
 import Test.HUnit
 
 premise =
