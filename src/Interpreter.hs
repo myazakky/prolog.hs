@@ -2,11 +2,6 @@ module Interpreter where
 
 import Data.List (intersectBy)
 import DataType
-import Text.Show (Show)
-
-type Assigment = (Term, Term)
-
-type Condition = (Bool, [Assigment])
 
 canTakeTerm :: [Assigment] -> Term -> Bool
 canTakeTerm as t = any (\a -> fst a === t) as
@@ -25,10 +20,6 @@ arentConflict c1 c2 = not (areConflict c1 c2)
 
 substitute :: Literal -> [Assigment] -> Literal
 substitute l as = Literal (literalName l) (map (\t -> if canTakeTerm as t then takeTerm as t else t) (literalArgs l))
-
-instance Eq Term where
-  (==) (Atom a1) (Atom a2) = a1 == a2
-  (==) _ _ = True
 
 (===) (Atom a1) (Atom a2) = a1 == a2
 (===) (Variable a1) (Variable a2) = a1 == a2

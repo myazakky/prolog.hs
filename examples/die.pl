@@ -1,0 +1,1 @@
+human(socrates).human(iida).die(X):-human(X).

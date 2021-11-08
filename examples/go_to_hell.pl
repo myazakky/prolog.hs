@@ -1,0 +1,1 @@
+warui(tanaka).name(tanaka,tarou).go_to_hell(X):-name(Y,X),warui(Y).
